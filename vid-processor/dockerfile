@@ -1,0 +1,13 @@
+# Define the first stage with an alias 'downloader'
+FROM alpine AS downloader
+RUN apk --no-cache add wget \
+    && wget -O /vid-processor.war 'https://moviid.s3.amazonaws.com/deployements/vid-processor/vid-processor.war?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAXWO7YJYRR7XBLGGY%2F20240403%2Feu-west-3%2Fs3%2Faws4_request&X-Amz-Date=20240403T210613Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFUaCWV1LXdlc3QtMyJHMEUCIBtuXGfhm5dMYwayFcYz2D6y2HW%2Fcu0wm9p343q57TUfAiEA6pQddx84%2FREvZfIp5YNtmcEQlXo8fB5wrSMJTwEgH0EqjwMIfhACGgw1MjkyODcxMDYwODMiDP0yBnfkKcaiefjW1SrsAgHvgTU2YpT%2B7PlUNYGOGzlS77hFEcOHEW%2BF9YPorFpSU97SDIzqmhkRr1Ikf7piW8VaGNbERQRiBxiJWf%2FhiYIiLYKLUN89D1WOZmQfHbDZFnxRZj44g9mRCJbYm3PqSxF4NkdVjuYREZDkeqJF8JAucTkB6JFDTWSunGlcNTMYBL%2FdX9CiSo%2B2lXSNlOwWq3eiXoHIsOUTtedBQi%2F1oTdXeIIKZWFXIUsmUxnWHpwFOLtmVmOLYWhSs8Stal0Icbjhm9loeWUskMHMt6Fkai1gXJvEGg4ZarFqZ3JukDHAvVqYlsVj35qUEzgtz2ENQNp0qwPsq41Sz5mIjoBY0TKSA9C%2BAdOWYnQwoGfnVLB65F34QExKcSP2EaUwcFZk5hR0p1D9K5bjH3Z7Okmmy3QWqpi9jTJ257g9jOQYE4i09dUgqfRcatx%2BIiPB4pNeoVcdoIJBjBEkfkXEsQ2LxTxIP55zTlE87gJRFbswwom3sAY6nQEHhDLCTzeMMj02mvqk34%2FqTtrIaSMn7UkILpIXOt1r0UMbiWJ6IMHisnpuZ2Ec8pnhc6bV5sWbXepJuAjGWybnKumGQ4yji%2BqCdA96UhUtnROmmWyW9ILHscvc3KaDoqosSnz4YKHE1zKiCfG%2FV2wPgeG4eAWzV8zrBe8xM8WGOa9HEHPta6464ElPW695LO4mvdX%2BxaCPiQhYWFqO&X-Amz-Signature=f282ccaa2c9e8925ea5365232819fe78bca56f1396942e15504b9292d4b483ed'
+# Define the second stage (your final image)
+FROM tomcat:10
+LABEL maintainer="fajrimoad@gmail.com"
+
+# Copy the .war file from the 'downloader' stage to the final image
+COPY --from=downloader /vid-processor.war /usr/local/tomcat/webapps/vid-processor.war
+
+EXPOSE 8080
+CMD ["catalina.sh", "run"]

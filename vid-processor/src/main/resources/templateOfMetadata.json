@@ -1,0 +1,46 @@
+{
+  "globalVideoID": "string (unique identifier for the video)", §
+  "title": "st ring (title of the video)",
+  "uploadTimestamp": "string (ISO 8601 timestamp of when the video was uploaded)",
+  "duration": "integer (total duration of the video in seconds)",
+  "originalLanguage": "string (ISO 639-1 language code for the original language)",
+  "targetLanguage": "string (ISO 639-1 language code for the translation target)",
+  "videoSourceUrl": "string (URL of the original video in S3)",
+  "processingStatus": "string (current status of the video processing: pending, processing, completed, failed)",
+  "segments": [
+    {
+      "segmentID": "string (unique identifier for the segment)",
+      "startTime": "integer (start time of the segment in seconds from the beginning of the video)",
+      "endTime": "integer (end time of the segment in seconds from the beginning of the video)",
+      "duration": "integer (duration of the segment in seconds)",
+      "segmentUrl": "string (URL of the segment video in S3)",
+      "ocrData": {
+        "timestamp": "string (ISO 8601 timestamp of when OCR was performed)",
+        "ocrOutput": "string (direct output from OCR processing)",
+        "ocrJsonUrl": "string (URL to JSON file containing detailed OCR metadata)"
+      },
+      "translations": [
+        {
+          "translatedText": "string (translated text from OCR output)",
+          "translationTimestamp": "string (ISO 8601 timestamp of when translation was done)"
+        }
+      ],
+      "subtitles": [
+        {
+          "subtitleID": "string (unique identifier for each subtitle)",
+          "startTime": "integer (start time of the subtitle in seconds from the start of the segment)",
+          "endTime": "integer (end time of the subtitle in seconds from the start of the segment)",
+          "text": "string (text of the subtitle)",
+          "translation": "string (translated subtitle text)"
+        }
+      ]
+    }
+  ],
+  "completionTimestamp": "string (ISO 8601 timestamp of when the video processing was completed)",
+  "errorLogs": [
+    {
+      "errorTimestamp": "string (ISO 8601 timestamp of when the error occurred)",
+      "errorMessage": "string (detailed error message if any part of the process fails)"
+    }
+  ]
+}
